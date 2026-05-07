@@ -9,27 +9,31 @@ Reusable rules and skills that apply to every project, extracted from VRT's CLAU
 
 ## Using this in a new project
 
-### Option A — reference (recommended): one prompt to the new project
+### Option A — fork (default for Cowork projects): inline the baseline
 
-In the new project's `CLAUDE.md`, add the following line near the top:
+Cowork's CLAUDE.md loader does not honor `@<path>` imports — the directive is left as literal text rather than expanded. So in Cowork projects, the canonical baseline content gets **copied** into the new project's `CLAUDE.md`, not referenced.
+
+Surround the inlined block with sync markers so future refreshes are mechanical:
+
+```markdown
+<!-- BEGIN: claude-standards/baseline.md -->
+[paste current contents of ~/Local/claude-standards/baseline.md, stripping its H1]
+<!-- END: claude-standards/baseline.md -->
+```
+
+To refresh after the canonical baseline changes, replace everything between the markers with the new content. A small `sync-baseline.sh` script (find the markers, splice in the latest file) is a reasonable next addition once you have more than two consumers.
+
+For skills, copy the skill folders you want directly into the project, or install them as a local plugin via `cowork-plugin-management:create-cowork-plugin`. Skill content (like `citation-standards/SKILL.md`) can also be referenced in prose from the project's CLAUDE.md and read on demand — that path doesn't require the import directive to work.
+
+### Option B — reference (Claude Code projects only)
+
+In environments that honor `@<path>` imports (Claude Code), the new project's `CLAUDE.md` can reference the canonical file directly:
 
 ```
 @~/Local/claude-standards/baseline.md
 ```
 
-Then copy the skill folders you want into the project's skills location, or install them as a local plugin.
-
-The new project's own `CLAUDE.md` adds project-specific rules (data model, terminology, commit-group taxonomy) inline below the import.
-
-### Option B — fork: copy the folders into the project
-
-Copy `baseline.md` and any skill folders directly into the new project. Reference the local copy from `CLAUDE.md`:
-
-```
-@./baseline.md
-```
-
-This trades single-source-of-truth for self-containment. Use it when the new project will diverge significantly, or when `@<absolute-path>` imports aren't reliable in the target environment.
+This preserves single-source-of-truth — fix the canonical file once, every consumer picks up the change. Verify the import resolves before relying on it (a quick test prompt that asks for a specific detail from `baseline.md` will surface a silent failure).
 
 ## Updating
 
