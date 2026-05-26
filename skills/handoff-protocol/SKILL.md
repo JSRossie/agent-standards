@@ -20,15 +20,16 @@ project hasn't set them, use the defaults and say so.
 
 | Parameter | Default | Meaning |
 |---|---|---|
-| **`handoffs_root`** | `.claude/handoffs/` | Where this project's handoffs live. |
+| **`handoffs_root`** | `.claude-handoffs/` | Where this project's handoffs live. A repo-root dir kept **outside** `.claude/` so Claude Code's `.claude/` write guard never prompts on handoff writes. |
 | **`git_posture`** | `tracked` | `tracked` = committed durable record (INDEX, timestamped, predecessor chain). `ephemeral` = gitignored scaffolding, discarded when its state lands in a durable doc. |
 | **`naming`** | `YYYY-MM-DDTHHMM-<slug>.md` | Filename pattern. `ephemeral` projects may drop the time: `YYYY-MM-DD-<slug>.md`. |
+| **`root_pointer`** | `HANDOFF.md` | A pointer at the **repo root** that always resolves to the newest handoff, for one-hop access. Set `none` to disable. |
 
 The two postures are both legitimate and deliberately opposite:
 
 - **`tracked`** (e.g. vrt): handoffs are part of the permanent record. Commit each
-  one, keep an `INDEX.md`, chain predecessors. Requires a `.gitignore` exception so
-  the rest of `.claude/` stays ignored — see "Git posture" below.
+  one, keep an `INDEX.md`, chain predecessors. The dir is a normal repo-root folder, so
+  it commits with no `.gitignore` handling — see "Git posture" below.
 - **`ephemeral`** (e.g. r-net): handoffs are throwaway scaffolding. Gitignored, never
   committed, no INDEX. **Rule:** if the state belongs in a durable artifact (WORKLOG,
   ADR, briefing, spec), update *that* instead — only write a handoff for context that
@@ -102,7 +103,7 @@ When a handoff continues a prior one, name it explicitly so the chain is
 followable:
 
 ```markdown
-**Predecessor.** Picked up from `.claude/handoffs/<earlier-file>.md` (<what it left done>).
+**Predecessor.** Picked up from `.claude-handoffs/<earlier-file>.md` (<what it left done>).
 ```
 
 A full template lives in `reference/handoff-template.md`.
@@ -120,35 +121,95 @@ _Updated 2026-05-25T14:30_
 - [2026-05-25 · <2–3 sentence executive summary of the handoff>](2026-05-25T1430-<slug>.md)
 ```
 
-Update the INDEX in the same step as writing the handoff.
+The INDEX's "last 5" deliberately matches what stays in `<handoffs_root>` after
+archiving (below), so its links always point at files in the root — never into
+`archive/`.
+
+## On each write
+
+When you write a handoff, do these in the same step (so they land in one commit):
+
+1. **Write** the handoff file under `<handoffs_root>` per the naming pattern.
+2. **INDEX** (`tracked`): refresh `INDEX.md` to the newest 5.
+3. **Archive** (`tracked`): move any handoff past the newest 5 into `archive/` (below).
+4. **Pointer**: refresh `<root_pointer>` to point at the file just written (below).
+
+## Archiving (`tracked` only)
+
+Keep the **5 most recent** handoffs in `<handoffs_root>`; older ones move to
+`<handoffs_root>/archive/`. This is the same 5 the INDEX lists, so the visible
+files always mirror the digest — the root stays scannable and the archive holds
+the long tail.
+
+```bash
+# from <handoffs_root>, after writing the new handoff.
+# [0-9]*.md matches timestamped handoffs and skips INDEX.md; the loop no-ops
+# when there's nothing to archive (portable across BSD/macOS and GNU).
+mkdir -p archive
+ls -1 [0-9]*.md 2>/dev/null | sort -r | tail -n +6 | while read -r f; do
+  git mv "$f" archive/
+done
+```
+
+- Use `git mv` so history follows the file and the move lands in the handoff's commit.
+- `archive/` needs no extra handling — `tracked` commits it like the rest of
+  `<handoffs_root>`; `ephemeral` already ignores it under the `/<handoffs_root>` entry.
+- **Links stay valid.** INDEX only ever lists the visible 5, so its links never reach
+  into `archive/`. A predecessor link breaks only once that predecessor ages past the
+  newest 5 — by which point its successor has also aged out of the active chain. The
+  resume path (latest + its immediate predecessor) is always within the visible 5; for
+  deeper history, look in `archive/`.
+- `ephemeral` projects don't archive — no INDEX, and handoffs are cleared manually.
+
+## Latest pointer
+
+Maintain `<root_pointer>` (default `HANDOFF.md`) at the **repo root** as a symlink to
+the newest handoff, so the file you reach for most is one hop from the top of the tree:
+
+```bash
+ln -sf "<handoffs_root>/<newest>.md" HANDOFF.md   # target is relative to the repo root
+```
+
+Refresh it whenever you write a handoff. It is a **local convenience and gitignored**
+(add `/HANDOFF.md` to `.gitignore`) — not part of the durable record, so it adds no
+root-level churn to commits and simply regenerates on the next write. A fresh clone has
+no pointer until the next handoff is written; that's fine. Set `root_pointer: none` in
+the project's `CLAUDE.md` to opt out. Applies to **both** postures.
 
 ## Git posture
 
-**`tracked`:** the handoffs dir must be exempted from a broad `.claude/` ignore.
-The convention:
+`<handoffs_root>` lives at the **repo root** (`.claude-handoffs/` by default), outside
+`.claude/`. That keeps Claude Code's `.claude/` write guard off it — handoff writes
+don't prompt — and it flips the default git behavior versus a path inside `.claude/`
+(which consumer repos usually ignore wholesale): a top-level dir is tracked unless you
+ignore it, so now `tracked` is free and `ephemeral` is the case that needs a rule.
+
+**`tracked`:** nothing to ignore — the dir is a normal tracked folder. (The old
+`.claude/*` + `!.claude/handoffs/` exception is no longer needed.) Commit handoffs on
+their own, with subject `handoffs: <short description>`. They persist permanently —
+archiving only **relocates** older ones into `archive/` (see "Archiving"), it never
+deletes them. A handoff stays `status: open` until the next one in the chain supersedes it.
+
+**`ephemeral`:** add the dir to `.gitignore` so scratch is never committed. At the repo
+root it is no longer swept up by a `.claude/` ignore, so this entry is **required**:
 
 ```gitignore
-# Claude project config: handoffs are tracked, the rest of .claude/ isn't
-.claude/*
-!.claude/handoffs/
+# Session handoffs: ephemeral scaffolding, not committed
+/.claude-handoffs/
 ```
 
-Commit handoffs on their own, with subject `handoffs: <short description>`. They
-persist permanently; there is no archival step. A handoff stays `status: open`
-until the next one in the chain supersedes it.
-
-**`ephemeral`:** the dir is gitignored. Never commit handoffs and never propose
-committing them. They remain on disk until manually cleared; re-reading an old one
-is a deliberate choice.
+Never commit handoffs and never propose committing them. They remain on disk until
+manually cleared; re-reading an old one is a deliberate choice.
 
 ## Resume workflow
 
 When the user says "resume from the latest handoff" / "pick up where we left off":
 
-1. List `<handoffs_root>`, newest by filename timestamp (for `tracked`, consult
-   `INDEX.md` first).
+1. Go to the latest: follow `<root_pointer>` if present, else consult `INDEX.md`
+   (`tracked`), else list `<handoffs_root>` newest by filename timestamp.
 2. Read the latest handoff in full; follow its `Read first` list before acting.
-3. If it names a predecessor and you lack that context, read it too.
+3. If it names a predecessor and you lack that context, read it too — recent
+   predecessors are in `<handoffs_root>`, older ones in `archive/`.
 4. Act on `Next`. Surface anything under `Open for <user>` before proceeding past it.
 
 ## Setting up a project
@@ -157,8 +218,11 @@ To adopt this standard in a project that doesn't have it:
 
 1. Add a `## Handoffs` section to the project's `CLAUDE.md` declaring `handoffs_root`
    and `git_posture` (see "Per-project parameters").
-2. Create `<handoffs_root>/`. For `tracked`, add the `.gitignore` exception above and
-   seed an empty `INDEX.md`.
-3. Ensure writes to `<handoffs_root>` don't prompt — the per-project permission seed
+2. Create `<handoffs_root>/`. For `tracked`, seed an empty `INDEX.md` (nothing to
+   gitignore — it's a top-level tracked dir). For `ephemeral`, add the `.gitignore`
+   entry shown under "Git posture".
+3. Unless `root_pointer: none`, add `/HANDOFF.md` (or the chosen pointer name) to the
+   repo's `.gitignore` — the pointer is a local convenience, not committed.
+4. Ensure writes to `<handoffs_root>` don't prompt — the per-project permission seed
    should allow `Write`/`Edit` on that path (it's a permissive rule, so it belongs in
    the project seed, never in global settings).
