@@ -31,9 +31,11 @@ The two postures are both legitimate and deliberately opposite:
   one, keep an `INDEX.md`, chain predecessors. The dir is a normal repo-root folder, so
   it commits with no `.gitignore` handling — see "Git posture" below.
 - **`ephemeral`** (e.g. r-net): handoffs are throwaway scaffolding. Gitignored, never
-  committed, no INDEX. **Rule:** if the state belongs in a durable artifact (WORKLOG,
-  ADR, briefing, spec), update *that* instead — only write a handoff for context that
-  has nowhere durable to live and that the next session needs.
+  committed, no INDEX or predecessor chain — but they **still archive** (newest 5 in the
+  root, older into a gitignored `archive/`) so the folder stays scannable as they pile up;
+  archival is independent of git posture. **Rule:** if the state belongs in a durable
+  artifact (WORKLOG, ADR, briefing, spec), update *that* instead — only write a handoff for
+  context that has nowhere durable to live and that the next session needs.
 
 ## When to write one
 
@@ -131,35 +133,44 @@ When you write a handoff, do these in the same step (so they land in one commit)
 
 1. **Write** the handoff file under `<handoffs_root>` per the naming pattern.
 2. **INDEX** (`tracked`): refresh `INDEX.md` to the newest 5.
-3. **Archive** (`tracked`): move any handoff past the newest 5 into `archive/` (below).
+3. **Archive** (both postures): move any handoff past the newest 5 into `archive/`
+   (below) — `git mv` for `tracked`, plain `mv` for `ephemeral`.
 4. **Pointer**: refresh `<root_pointer>` to point at the file just written (below).
 
-## Archiving (`tracked` only)
+## Archiving (both postures)
 
 Keep the **5 most recent** handoffs in `<handoffs_root>`; older ones move to
-`<handoffs_root>/archive/`. This is the same 5 the INDEX lists, so the visible
-files always mirror the digest — the root stays scannable and the archive holds
-the long tail.
+`<handoffs_root>/archive/`. For `tracked` this is the same 5 the INDEX lists, so the
+visible files mirror the digest; for `ephemeral` it simply keeps the root scannable as
+handoffs accumulate. Either way the root stays short and the archive holds the long tail.
+
+The only difference is the move command — `git mv` when `tracked` (so history follows the
+file and the move lands in the handoff's commit), plain `mv` when `ephemeral` (the dir is
+gitignored, so `git mv` would error; nothing about the move is committed):
 
 ```bash
 # from <handoffs_root>, after writing the new handoff.
 # [0-9]*.md matches timestamped handoffs and skips INDEX.md; the loop no-ops
 # when there's nothing to archive (portable across BSD/macOS and GNU).
 mkdir -p archive
+mover="git mv"; git check-ignore -q . && mover="mv"   # gitignored dir → plain mv
 ls -1 [0-9]*.md 2>/dev/null | sort -r | tail -n +6 | while read -r f; do
-  git mv "$f" archive/
+  $mover "$f" archive/
 done
 ```
 
-- Use `git mv` so history follows the file and the move lands in the handoff's commit.
 - `archive/` needs no extra handling — `tracked` commits it like the rest of
-  `<handoffs_root>`; `ephemeral` already ignores it under the `/<handoffs_root>` entry.
-- **Links stay valid.** INDEX only ever lists the visible 5, so its links never reach
-  into `archive/`. A predecessor link breaks only once that predecessor ages past the
+  `<handoffs_root>`; `ephemeral` already ignores it under the `/<handoffs_root>` entry,
+  so archived files stay on disk locally but never enter git.
+- Archiving **relocates, never deletes** — the long tail remains recoverable. A repo that
+  genuinely wants pruning can swap `mv` for `rm`, but the default keeps the files.
+- **Links stay valid (`tracked`).** INDEX only ever lists the visible 5, so its links never
+  reach into `archive/`. A predecessor link breaks only once that predecessor ages past the
   newest 5 — by which point its successor has also aged out of the active chain. The
   resume path (latest + its immediate predecessor) is always within the visible 5; for
   deeper history, look in `archive/`.
-- `ephemeral` projects don't archive — no INDEX, and handoffs are cleared manually.
+- `ephemeral` keeps no INDEX and no predecessor chain — `ls` of the (now-short) root is the
+  index, and `archive/` holds older context if a resume needs to reach back.
 
 ## Latest pointer
 
