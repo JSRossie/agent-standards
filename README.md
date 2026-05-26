@@ -39,6 +39,15 @@ This preserves single-source-of-truth — fix the canonical file once, every con
 
 This is a regular git repo. Edit, commit, and the next project that imports `baseline.md` picks up the change. Forked copies stay frozen until manually re-synced.
 
+## Shipped skills
+
+- `citation-standards` — IEEE-with-business-extensions citations for authored markdown.
+- `handoff-protocol` — the cross-project session-handoff standard (the context dump a
+  session writes so the next can resume cold). Parameterized on `handoffs_root` /
+  `git_posture` per project; derived from VRT. See `dotClaude` ADR-0012.
+
 ## What's not in here yet
 
-Only `citation-standards` is shipped as a skill so far. The remaining portable concerns (`document-conventions`, `document-timestamping`, `commit-review-helper`, `research-citation-schema`) get extracted from VRT on demand as new projects need them.
+The remaining portable concerns (`document-conventions`, `document-timestamping`, `commit-review-helper`, `research-citation-schema`) get extracted from VRT on demand as new projects need them.
+
+**`handoff-protocol` distribution is not wired yet.** This repo has no git remote, so it can't be pulled via `.chezmoiexternal` (the mechanism used for design-system skills). The distribution decision is tracked in `dotClaude`'s handoff `2026-05-25T1928-handoff-protocol-distribution-and-migration.md`.
