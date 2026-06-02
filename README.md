@@ -1,53 +1,70 @@
-# Claude Standards
+# Agent Standards
 
-Reusable rules and skills that apply to every project, extracted from VRT's CLAUDE.md.
+Reusable, cross-tool rules and skills that apply to every project. Behaviors are defined
+once here and consumed by multiple agent tools — Claude Code via skills, other agents
+(e.g. GitHub Copilot) via web-consumable renders.
+
+> Renamed from `claude-standards` — the behaviors aren't Claude-specific. See dotClaude
+> ADR-0014 for the cross-tool model (two-tier topology, dual rendering).
 
 ## Layout
 
 - `baseline.md` — always-on operational rules (commit hygiene, sandbox recovery, git posture). Designed to be imported into a project's `CLAUDE.md`.
-- `skills/` — skill source folders. Copy into a project's skills folder, or package into a local plugin via the `cowork-plugin-management:create-cowork-plugin` skill.
+- `skills/` — Claude-native skill source folders (the canonical definition of each behavior).
+- `github/` — web-consumable renders of those skills (`AGENTS.md` + optional `*.prompt.md`) for agents that don't read Claude Code skills. See [github/README.md](github/README.md).
 
-## Using this in a new project
+## Using a behavior in a new project
 
-### Option A — fork (default for Cowork projects): inline the baseline
+### Claude Code — reference the skill
+Skills install globally via dotClaude's `.chezmoiexternal` (pulled into `~/.claude/skills/`),
+or copy a skill folder into a project. The project's `CLAUDE.md` then references it by name.
 
-Cowork's CLAUDE.md loader does not honor `@<path>` imports — the directive is left as literal text rather than expanded. So in Cowork projects, the canonical baseline content gets **copied** into the new project's `CLAUDE.md`, not referenced.
+### Other agents (e.g. Copilot) — copy the render
+Clone this repo and copy the relevant `github/<behavior>/` render into your target repo:
+`AGENTS.md` at the repo root (merge if one exists) and any `*.prompt.md` into
+`.github/prompts/`. Commit them there so they travel with the repo.
 
-Surround the inlined block with sync markers so future refreshes are mechanical:
+### Baseline rules
+`baseline.md` is imported into a project's `CLAUDE.md`. In environments that honor
+`@<path>` imports (Claude Code), reference it directly:
+
+```
+@~/Local/agent-standards/baseline.md
+```
+
+Environments that don't expand imports (e.g. Cowork) **inline** the content between sync
+markers instead:
 
 ```markdown
-<!-- BEGIN: claude-standards/baseline.md -->
-[paste current contents of ~/Local/claude-standards/baseline.md, stripping its H1]
-<!-- END: claude-standards/baseline.md -->
+<!-- BEGIN: agent-standards/baseline.md -->
+[paste current contents of ~/Local/agent-standards/baseline.md, stripping its H1]
+<!-- END: agent-standards/baseline.md -->
 ```
 
-To refresh after the canonical baseline changes, replace everything between the markers with the new content. A small `sync-baseline.sh` script (find the markers, splice in the latest file) is a reasonable next addition once you have more than two consumers.
+Refresh by replacing everything between the markers with the latest file. A small
+`sync-baseline.sh` (find the markers, splice in the latest file) is a reasonable addition
+once there are more than two consumers.
 
-For skills, copy the skill folders you want directly into the project, or install them as a local plugin via `cowork-plugin-management:create-cowork-plugin`. Skill content (like `citation-standards/SKILL.md`) can also be referenced in prose from the project's CLAUDE.md and read on demand — that path doesn't require the import directive to work.
+## Distribution
 
-### Option B — reference (Claude Code projects only)
+This is a public git repo (`JSRossie/agent-standards`). Claude Code skills are pulled into
+`~/.claude/skills/` via dotClaude's `.chezmoiexternal` (weekly, or
+`chezmoi apply --refresh-externals`); the handoff distribution decision is recorded in
+dotClaude ADR-0012. GitHub renders are copied per-repo (see above). Forked/inlined copies
+stay frozen until manually re-synced.
 
-In environments that honor `@<path>` imports (Claude Code), the new project's `CLAUDE.md` can reference the canonical file directly:
+## Shipped
 
-```
-@~/Local/claude-standards/baseline.md
-```
+| Behavior | Skill (Claude-native) | Render (cross-tool) |
+|---|---|---|
+| `citation-standards` | `skills/citation-standards/` | — |
+| `handoff-protocol` | `skills/handoff-protocol/` | `github/handoff/` |
 
-This preserves single-source-of-truth — fix the canonical file once, every consumer picks up the change. Verify the import resolves before relying on it (a quick test prompt that asks for a specific detail from `baseline.md` will surface a silent failure).
+`handoff-protocol` is parameterized on `handoffs_root` / `git_posture` per project; derived
+from VRT. See dotClaude ADR-0012 (the standard) and ADR-0014 (the cross-tool render).
 
-## Updating
+## Not extracted yet
 
-This is a regular git repo. Edit, commit, and the next project that imports `baseline.md` picks up the change. Forked copies stay frozen until manually re-synced.
-
-## Shipped skills
-
-- `citation-standards` — IEEE-with-business-extensions citations for authored markdown.
-- `handoff-protocol` — the cross-project session-handoff standard (the context dump a
-  session writes so the next can resume cold). Parameterized on `handoffs_root` /
-  `git_posture` per project; derived from VRT. See `dotClaude` ADR-0012.
-
-## What's not in here yet
-
-The remaining portable concerns (`document-conventions`, `document-timestamping`, `commit-review-helper`, `research-citation-schema`) get extracted from VRT on demand as new projects need them.
-
-**`handoff-protocol` distribution is not wired yet.** This repo has no git remote, so it can't be pulled via `.chezmoiexternal` (the mechanism used for design-system skills). The distribution decision is tracked in `dotClaude`'s handoff `2026-05-25T1928-handoff-protocol-distribution-and-migration.md`.
+Remaining portable concerns (`document-conventions`, `document-timestamping`,
+`commit-review-helper`, `research-citation-schema`) get pulled from VRT on demand as new
+projects need them.

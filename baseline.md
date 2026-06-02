@@ -87,4 +87,4 @@ The following are project-specific and live in each project's own `CLAUDE.md`:
 - **Commit-group taxonomy** — what categories of files exist in this project, how they split into commits, and in what order. The helper's group config lives per-project.
 - **Pipeline-integrity specifics** — which scripts must have run, which invariants must pass, what counts as a HARD vs WARN.
 - **Project paths, data model, naming conventions, terminology.**
-- **Skill installations** — list which skills from `~/Local/claude-standards/skills/` (or elsewhere) are in scope.
+- **Skill installations** — list which skills from `~/Local/agent-standards/skills/` (or elsewhere) are in scope.
