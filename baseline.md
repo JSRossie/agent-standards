@@ -1,6 +1,6 @@
 # Claude Baseline Standards
 
-Always-on operational rules that apply to every project. Project-specific rules (commit-group taxonomy, pipeline details, data model, terminology) are added inline by each project's `CLAUDE.md` after this import.
+Always-on operational rules that apply to every project. Project-specific rules (commit-group taxonomy, pipeline details, data model, terminology) are added inline by each project's `CLAUDE.md` after this import. The git rules below — hard rules, commit hygiene, and concurrent/multi-agent worktree discipline — are the canonical, portable nucleus: import them from here rather than re-deriving them per repo, which is how they drift.
 
 ## Sandbox file-delete recovery (Cowork)
 
@@ -58,9 +58,32 @@ To undo after the fact: `git reset --soft HEAD~N` reverses the last N commits an
 - Never run `git push`, `git push --force`, or any remote-modifying command.
 - Never amend or rewrite existing commits.
 - Never commit while a HARD warning is outstanding (debris or pipeline-integrity).
-- Never use `git add .` or `git add -A`. Always pass the helper's explicit per-group file list.
+- Never use `git add .` or `git add -A`. Stage explicit file paths (in helper-driven projects, the helper's per-group file list).
+- Never skip hooks (`--no-verify`, `--no-gpg-sign`) without an explicit user instruction.
 - Never operate on nested git repositories from outside their root.
 - Never bundle a commit and `git gc` into the same bash call. Each belongs in its own invocation so neither can timeout-kill the other.
+
+## Concurrent & multi-agent git hygiene
+
+These rules apply when **more than one session or agent works the same repo at once** — parallel Claude sessions, or background agents spawned with `isolation: "worktree"`. Serial single-operator work is unaffected: it lands on the working branch directly, as usual. The failure mode they prevent is two workers colliding on one checkout — a commit landing on whichever branch happens to be checked out, or one agent's `git add` sweeping in another's half-done work.
+
+- **Branch per task, named for the work.** Each concurrent session/agent branches off its stated base as `<type>/<short-topic>`, with `<type>` drawn from the commit-type vocabulary (`feat`/`fix`/`docs`/`chore`/…): `feat/dns-secondary`, `fix/boot-leg`. Never land work on a branch named for a different task; never invent an opaque name unrelated to the work.
+- **Isolated worktrees, never a shared checkout.** The foreground session owns the primary checkout; parallel/background agents each run in their own `git worktree` (the Agent tool's `isolation: "worktree"`). Two agents mutating one working tree corrupt each other's index and files.
+- **Confirm your branch immediately before every commit.** Run `git branch --show-current` and abort if it isn't the branch you created for this task. This is the check that catches a commit about to land on someone else's branch.
+- **Stage explicit paths (the no-`git add .` rule, sharpened).** In a shared tree, `git add .` / `-A` sweeps another agent's uncommitted work into your commit. Stage only the paths you changed.
+- **Don't touch a branch or checkout you don't own.** Don't switch the primary checkout while another session is using it; don't `git branch -f`, `reset --hard`, or delete a branch you didn't create. History rewrites stay ask-first whichever branch they target.
+- **Wrong-branch recovery: prefer the lossless move.** If a commit lands on the wrong branch and the intended branch is an ancestor of it (so fast-forwarding loses nothing), point the intended branch at the commit and switch to it — then leave the wrong branch as you found it for its owner:
+
+  ```
+  git branch -f <intended-branch> <commit>
+  git switch <intended-branch>
+  ```
+
+  Ask the operator before rewinding anything that is not a clean fast-forward.
+
+### Deterministic checks over prose
+
+If an invariant can be expressed as a check, encode it — in a hook (see *One-time hooks setup per clone* below) or CI — rather than as a paragraph every agent has to remember to follow. Prose is for genuine judgment (when to branch, how to write a good commit message); mechanical invariants (branch guards, single-writer file ownership, regenerating a derived file) belong in enforcement. The corollary for shared "hot" files that nearly every session edits — status logs, indexes, lockfiles — is structural: make the file single-owner or generated from per-session fragments, so two agents never open the same file, instead of asking everyone to "edit only their own section." A convention is the first thing concurrent work violates; structure can't be.
 
 ## Git hygiene
 
