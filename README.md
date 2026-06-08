@@ -9,9 +9,14 @@ once here and consumed by multiple agent tools — Claude Code via skills, other
 
 ## Layout
 
-- `baseline.md` — always-on operational rules (commit hygiene, sandbox recovery, git posture). Designed to be imported into a project's `CLAUDE.md`.
+- `baseline.md` — the **always-on portable nucleus**: rules that apply to every project in any environment (commit format & posture, hard rules, concurrent-git hygiene). Designed to be imported whole into a project's `CLAUDE.md` without ever contradicting a sane project.
+- `fragments/` — **opt-in** import fragments for environment- or project-specific machinery a project references *by name only if it applies*. Imported the same way as `baseline.md`. See *Baseline & fragments* below.
 - `skills/` — Claude-native skill source folders (the canonical definition of each behavior).
 - `github/` — web-consumable renders of those skills (`AGENTS.md` + optional `*.prompt.md`) for agents that don't read Claude Code skills. See [github/README.md](github/README.md).
+
+`baseline.md` (always) vs `fragments/*.md` (opt-in) is the core split: baseline carries only what's
+true everywhere, so importing it never pulls in dead weight or guidance that fights the importing
+project. Decision recorded in dotClaude ADR-0016 (the split) on top of ADR-0014 (the cross-tool hub).
 
 ## Using a behavior in a new project
 
@@ -24,7 +29,7 @@ Clone this repo and copy the relevant `github/<behavior>/` render into your targ
 `AGENTS.md` at the repo root (merge if one exists) and any `*.prompt.md` into
 `.github/prompts/`. Commit them there so they travel with the repo.
 
-### Baseline rules
+### Baseline & fragments
 `baseline.md` is imported into a project's `CLAUDE.md`. In environments that honor
 `@<path>` imports (Claude Code), reference it directly:
 
@@ -44,6 +49,15 @@ markers instead:
 Refresh by replacing everything between the markers with the latest file. A small
 `sync-baseline.sh` (find the markers, splice in the latest file) is a reasonable addition
 once there are more than two consumers.
+
+**Fragments are imported the same way** — `@~/Local/agent-standards/fragments/<name>.md` in
+Claude Code, or inlined between their own `<!-- BEGIN/END: agent-standards/fragments/<name>.md -->`
+markers in Cowork — but **only by projects they apply to**. A project picks the fragments it needs:
+
+| Fragment | Import when |
+|---|---|
+| [`fragments/commit-review-helper.md`](fragments/commit-review-helper.md) | the project has a `commit_review.py`-style auto-split commit helper |
+| [`fragments/cowork-sandbox.md`](fragments/cowork-sandbox.md) | the project runs in a Cowork sandbox (file-delete recovery, `gc.auto=0`, debris handling) |
 
 ## Distribution
 
@@ -66,5 +80,5 @@ from VRT. See dotClaude ADR-0012 (the standard) and ADR-0014 (the cross-tool ren
 ## Not extracted yet
 
 Remaining portable concerns (`document-conventions`, `document-timestamping`,
-`commit-review-helper`, `research-citation-schema`) get pulled from VRT on demand as new
-projects need them.
+`research-citation-schema`) get pulled from VRT on demand as new projects need them.
+(`commit-review-helper` is now extracted — see [`fragments/`](fragments/).)
