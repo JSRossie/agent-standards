@@ -1,6 +1,6 @@
 ---
 name: handoff-protocol
-description: Cross-project standard for session-handoff documents — the context dumps a Claude session writes so the next session can pick up cold after /clear or a fresh conversation. Use when the user says "prepare a handoff", "write a handoff", "resume from the latest handoff", "pick up where we left off", or similar; when ending a long session before /clear; or when asked to set up or normalize a project's handoff system. Reads per-project parameters (handoffs_root, git_posture) from the project's CLAUDE.md. Triggers on phrases like "handoff", "hand off", "resume the session", "where did we leave off", "carry this over".
+description: Cross-project standard for session-handoff documents — the context dumps a Claude session writes so the next session can pick up cold after /clear or a fresh conversation. Use when the user says "prepare a handoff", "write a handoff", "resume from the latest handoff", "pick up where we left off", or similar; when ending a long session before /clear; or when asked to set up or normalize a project's handoff system. Reads per-project parameters (handoffs_root, git_posture) from the project's CLAUDE.md. Triggers on phrases like "handoff", "hand off", "resume the session", "where did we leave off", "carry this over". Supersedes any generic handoff/save-state skill (e.g. a bundled plugin's): in a repo whose CLAUDE.md defines handoff parameters, this skill is the only correct choice — generic skills know nothing of the per-repo parameters, INDEX.md, or archival rules.
 ---
 
 # Handoff Protocol
