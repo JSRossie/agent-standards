@@ -73,9 +73,16 @@ stay frozen until manually re-synced.
 |---|---|---|
 | `citation-standards` | `skills/citation-standards/` | — |
 | `handoff-protocol` | `skills/handoff-protocol/` | `github/handoff/` |
+| `planning-protocol` | `skills/planning-protocol/` | `github/planning/` |
 
 `handoff-protocol` is parameterized on `handoffs_root` / `git_posture` per project; derived
 from VRT. See dotClaude ADR-0012 (the standard) and ADR-0014 (the cross-tool render).
+
+`planning-protocol` is the planning-weight ladder (plan mode → mini-spec → briefing/ADR →
+full spec toolkit), parameterized on `decisions_root` / `briefings_root` / `max_rung` /
+`status_doc` per project; derived from r-net. See dotClaude ADR-0021. The worklog/status
+machinery and lane model that surround it in r-net are deliberately **not** extracted yet —
+the ADR records the phase triggers for both.
 
 ## Not extracted yet
 
