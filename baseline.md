@@ -104,6 +104,32 @@ checked out, or one agent's `git add` sweeping in another's half-done work.
 
   Ask the operator before rewinding anything that is not a clean fast-forward.
 
+## Integration: protect the invariants, not the path
+
+When a branch lands on the trunk, what the standard protects is **repository integrity** — the
+end state and the invariants below — not a clean separation of sessions or a tidy context. How the
+branch got there does not matter; these must always hold:
+
+- **Merges and single-writer state edits run from the trunk's own checkout, never a linked
+  worktree.** The integration merge, and any edit to a single-owner shared file (status logs,
+  generated aggregates), happens in the primary checkout. Where a project has branch/status guards,
+  they enforce this; where it doesn't, it is still the rule.
+- **`--no-ff` when the trunk has moved; never skip hooks.** Fast-forward only when the trunk is an
+  ancestor of the branch; otherwise merge `--no-ff` so the integration is a real commit. Every
+  pre-commit/pre-push hook runs — no `--no-verify`.
+- **The hard rules above still apply** — never force-push, amend pushed commits, or `git add .`.
+
+**Self-integration is allowed.** A single session may act as its own integrator: build the work on
+a task branch, then, from the trunk's checkout, merge that branch itself — with no obligation to
+write a formal ready-signal and hand to a separate session. The invariants above are the whole
+requirement; the session simply plays both halves.
+
+A formal hand-off to a separate integrator (a ready-signal, a marker file, a PR queue) is the right
+tool in two cases, not a blanket requirement: when the integrator is a **separate, cold session**,
+or when **concurrent agents contend** for the trunk and must be serialized behind one writer.
+Absent that contention, self-integration is simpler and equally correct. For rapid
+iterate-and-deploy cutovers, converging manually and integrating once is likewise fine.
+
 ## Deterministic checks over prose
 
 If an invariant can be expressed as a check, encode it — in a hook (see *One-time hooks setup per
