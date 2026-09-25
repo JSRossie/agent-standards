@@ -179,4 +179,5 @@ for precision. Their use is optional; plain imperative is equally binding.
 
 - `reference/STANDARDS.md` — the source standards: origin, description, pros/cons, sample
   output, when to reach for each.
-- `reference/QUICKREF.md` — one-page reminder. Also the source for the printable page.
+- `reference/QUICKREF.md` — one-page reminder, plain text.
+- `reference/quickref.html` — the printable page (letter, two pages): rules, flowchart, formats, uncertainty scale, never-list, source catalog.

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Executive Communication</title>
+<meta name="description" content="One-page reference for the exec-comms standard: how an agent, or a person, reports to an executive reader.">
+<link rel="stylesheet" href="https://cdn.rossie.net/charts-and-vectors/css/v1/rnet.css">
+<style>
+  /* Charts & Vectors · ceremonial light. Accent: sky-deep, three uses (stripe, eyebrows, flow terminals). */
+  :root { color-scheme: light; }
+  html { background: var(--paper-true); }
+  body {
+    margin: 0; background: var(--paper-true); color: var(--ink);
+    font-family: var(--font-body); font-size: 13.5px; line-height: 1.55;
+  }
+  .page { max-width: 8.5in; margin: 0 auto; padding: 0 16px 40px; }
+  .stripe { height: 4px; background: var(--sky-deep); margin: 0 -16px; }
+
+  header { padding: 28px 0 18px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end; }
+  .eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--sky-deep); }
+  h1 { font-family: var(--font-display); font-weight: 600; font-size: 30px; letter-spacing: -1px; line-height: 1.05; margin: 6px 0 8px; }
+  .lede { max-width: 560px; margin: 0; color: var(--ink-2); }
+  .meta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--graphite); text-align: right; line-height: 1.9; }
+
+  section { margin-top: 26px; break-inside: avoid; }
+  .sh { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .sh .n { font-family: var(--font-mono); font-size: 10px; color: var(--sky-deep); letter-spacing: 1px; }
+  .sh .t { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink); }
+  .sh .r { flex: 1; height: 1px; background: var(--panel-light); }
+  .sh .m { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--graphite); }
+
+  .rules { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .rule b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 14px; letter-spacing: -0.3px; margin-bottom: 3px; }
+  .rule .k { font-family: var(--font-mono); font-size: 9.5px; color: var(--graphite); letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .rule p { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+
+  .posture { border-left: 2px solid var(--panel-light); padding: 4px 0 4px 14px; margin: 0 0 4px; color: var(--ink-2); font-size: 13px; max-width: 700px; }
+  .posture i { color: var(--ink); font-style: italic; }
+
+  .two { display: grid; grid-template-columns: 1.15fr 1fr; gap: 28px; align-items: start; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--graphite); font-weight: 500; text-align: left; padding: 0 8px 6px 0; border-bottom: 1px solid var(--panel); }
+  td { padding: 6px 8px 6px 0; border-bottom: 1px solid var(--panel-light); vertical-align: top; }
+  td.f { font-family: var(--font-display); font-weight: 600; font-size: 12.5px; white-space: nowrap; }
+  td.s { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-2); }
+  tr:last-child td { border-bottom: 0; }
+
+  svg { width: 100%; height: auto; display: block; }
+  .flow text { font-family: var(--font-body); font-size: 11px; fill: var(--ink); }
+  .flow text.q { font-weight: 600; }
+  .flow text.yn { font-family: var(--font-mono); font-size: 9px; fill: var(--graphite); letter-spacing: 1px; }
+  .flow text.out { font-family: var(--font-display); font-weight: 600; font-size: 11.5px; }
+  .flow text.sub { font-family: var(--font-mono); font-size: 8px; fill: var(--graphite); }
+  .flow .q-box { fill: var(--paper-chart); stroke: var(--panel); stroke-width: 1; }
+  .flow .o-box { fill: none; stroke: var(--sky-deep); stroke-width: 1.2; }
+  .flow .end { fill: var(--sky-deep); }
+  .flow text.end-t { fill: var(--paper-true); font-family: var(--font-display); font-weight: 600; font-size: 11.5px; }
+  .flow line, .flow path { stroke: var(--panel); stroke-width: 1; fill: none; }
+  .flow .arrow { fill: var(--panel); }
+
+  .scale { display: grid; grid-template-columns: 9fr 14fr 21fr 12fr 21fr 14fr 11fr; gap: 3px; margin-top: 4px; }
+  .band { border-top: 3px solid var(--panel); padding-top: 6px; }
+  .band .t { font-family: var(--font-display); font-weight: 600; font-size: 11.5px; letter-spacing: -0.2px; line-height: 1.15; }
+  .band .p { font-family: var(--font-mono); font-size: 9.5px; color: var(--graphite); letter-spacing: 0.5px; }
+  .band.mid { border-top-color: var(--sky-deep); }
+  .scale-note { font-size: 12px; color: var(--ink-2); margin: 10px 0 0; max-width: 720px; }
+
+  .never { columns: 2; column-gap: 28px; font-size: 12.5px; margin: 0; padding: 0; list-style: none; }
+  .never li { break-inside: avoid; padding: 3px 0; border-bottom: 1px solid var(--panel-light); }
+  .never li b { font-family: var(--font-display); font-weight: 600; }
+  .never li span { color: var(--ink-2); }
+
+  .cat { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 28px; font-size: 12px; }
+  .cat div { padding: 5px 0; border-bottom: 1px solid var(--panel-light); }
+  .cat b { font-family: var(--font-display); font-weight: 600; font-size: 12.5px; }
+  .cat .o { font-family: var(--font-mono); font-size: 9.5px; color: var(--graphite); letter-spacing: 0.5px; }
+  .cat p { margin: 2px 0 0; color: var(--ink-2); }
+
+  .bound { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 12.5px; }
+  .bound b { font-family: var(--font-display); font-weight: 600; display: block; }
+
+  footer { margin-top: 36px; padding-top: 10px; border-top: 1px solid var(--panel-light); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--graphite); }
+
+  @media screen and (max-width: 760px) {
+    .rules, .two, .cat, .bound { grid-template-columns: 1fr; }
+    .never { columns: 1; }
+    header { grid-template-columns: 1fr; }
+    .meta { text-align: left; }
+    .scale { grid-template-columns: repeat(7, 1fr); }
+  }
+  @media print {
+    @page { size: letter; margin: 0.5in 0.55in; }
+    html, body { background: #fff; }
+    .page { max-width: none; padding: 0; }
+    .stripe { margin: 0; }
+    body { font-size: 10.5px; line-height: 1.45; }
+    header { padding: 14px 0 8px; }
+    h1 { font-size: 24px; margin: 4px 0 4px; }
+    .lede { font-size: 10.5px; }
+    section { margin-top: 12px; }
+    .sh { margin-bottom: 7px; }
+    .rules { gap: 10px; }
+    .rule b { font-size: 12px; } .rule p { font-size: 10px; }
+    .posture { font-size: 10.5px; }
+    .two { grid-template-columns: 1.1fr 1fr; gap: 18px; }
+    svg { max-height: 5.3in; }
+    table { font-size: 10.5px; } td { padding: 4px 6px 4px 0; } td.s { font-size: 9px; } td.f { font-size: 10.5px; }
+    .scale-note { font-size: 10px; margin-top: 6px; }
+    .band .t { font-size: 10px; } .band .p { font-size: 8.5px; }
+    .never { font-size: 10.5px; } .never li { padding: 2px 0; }
+    .cat { grid-template-columns: 1fr 1fr 1fr; gap: 3px 16px; font-size: 9.5px; }
+    .cat b { font-size: 10.5px; } .cat .o { font-size: 8.5px; } .cat div { padding: 3px 0; }
+    .bound { font-size: 10.5px; }
+    footer { margin-top: 14px; }
+    .pb { break-before: page; margin-top: 0; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="stripe"></div>
+
+  <header>
+    <div>
+      <div class="eyebrow">Standard · exec-comms</div>
+      <h1>Executive Communication</h1>
+      <p class="lede">How an agent, or a person, reports to an executive reader. One page: the posture, the five rules, which format to reach for, how to say how sure you are, and what never to do.</p>
+    </div>
+    <div class="meta">25 · SEP · 2026<br>agent-standards<br>reference v1.0</div>
+  </header>
+
+  <section>
+    <div class="sh"><span class="n">01 ▸</span><span class="t">Posture</span><span class="r"></span><span class="m">Completed staff work · 1942</span></div>
+    <p class="posture">Bring a finished recommendation the reader can approve with a word. Never a question that pushes the work back. Every output is <i>decision-ready</i>: the reader learns the answer, the ask, or the problem in the first line and can stop there.</p>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">02 ▸</span><span class="t">The five rules</span><span class="r"></span><span class="m">Always on</span></div>
+    <div class="rules">
+      <div class="rule"><span class="k">BLUF · AR 25-50</span><b>Bottom line first</b><p>Sentence one is the conclusion, the ask, or the problem. Never the background.</p></div>
+      <div class="rule"><span class="k">Mgmt by exception</span><b>Silence is on track</b><p>Speak for decisions needed, blockers, deviations, milestones. Not routine progress.</p></div>
+      <div class="rule"><span class="k">Completed staff work</span><b>Recommend one</b><p>One option, one-line why. Other options exist only to show the choice was made.</p></div>
+      <div class="rule"><span class="k">ICD 203</span><b>Calibrated uncertainty</b><p>Fixed vocabulary. Facts stated plainly; judgments carry a term. Never stack hedges.</p></div>
+      <div class="rule"><span class="k">Smart Brevity</span><b>Brief</b><p>The reader will ask for more. Cut anything that does not change what they do next.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">03 ▸</span><span class="t">Choose the format</span><span class="r"></span><span class="m">First line is always the bottom line</span></div>
+    <div class="two">
+      <div>
+        <svg class="flow" viewBox="0 0 400 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flowchart for choosing a format">
+          <defs><marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8 z" class="arrow"/></marker></defs>
+
+          <!-- Q1 costly action -->
+          <rect class="q-box" x="20" y="10" width="200" height="40" rx="2"/>
+          <text class="q" x="120" y="27" text-anchor="middle">About to take a costly</text>
+          <text class="q" x="120" y="41" text-anchor="middle">or irreversible action?</text>
+          <line x1="220" y1="30" x2="272" y2="30" marker-end="url(#a)"/><text class="yn" x="240" y="24">YES</text>
+          <rect class="o-box" x="262" y="12" width="136" height="36" rx="2"/>
+          <text class="out" x="332" y="28" text-anchor="middle">Closed-loop confirm</text>
+          <text class="sub" x="332" y="41" text-anchor="middle">one line · then wait</text>
+          <line x1="120" y1="50" x2="120" y2="78" marker-end="url(#a)"/><text class="yn" x="126" y="68">NO</text>
+
+          <!-- Q2 judgment call -->
+          <rect class="q-box" x="20" y="80" width="200" height="40" rx="2"/>
+          <text class="q" x="120" y="97" text-anchor="middle">Made a judgment call</text>
+          <text class="q" x="120" y="111" text-anchor="middle">on your own?</text>
+          <line x1="220" y1="100" x2="272" y2="100" marker-end="url(#a)"/><text class="yn" x="240" y="94">YES</text>
+          <rect class="o-box" x="262" y="82" width="136" height="36" rx="2"/>
+          <text class="out" x="332" y="98" text-anchor="middle">Decision log line</text>
+          <text class="sub" x="332" y="111" text-anchor="middle">append · then continue</text>
+          <line x1="120" y1="120" x2="120" y2="148" marker-end="url(#a)"/><text class="yn" x="126" y="138">NO</text>
+          <path d="M332 118 V134 H140" marker-end="url(#a)"/>
+
+          <!-- Q3 must decide -->
+          <rect class="q-box" x="20" y="150" width="200" height="40" rx="2"/>
+          <text class="q" x="120" y="174" text-anchor="middle">Reader must decide?</text>
+          <line x1="220" y1="170" x2="272" y2="170" marker-end="url(#a)"/><text class="yn" x="240" y="164">YES</text>
+          <rect class="q-box" x="274" y="152" width="116" height="36" rx="2"/>
+          <text class="q" x="332" y="167" text-anchor="middle">Something wrong</text>
+          <text class="q" x="332" y="180" text-anchor="middle">and time matters?</text>
+          <line x1="300" y1="188" x2="300" y2="214" marker-end="url(#a)"/><text class="yn" x="280" y="205">YES</text>
+          <line x1="364" y1="188" x2="364" y2="214" marker-end="url(#a)"/><text class="yn" x="370" y="205">NO</text>
+          <rect class="o-box" x="274" y="216" width="52" height="30" rx="2"/><text class="out" x="300" y="235" text-anchor="middle">SBAR</text>
+          <rect class="o-box" x="332" y="216" width="58" height="30" rx="2"/><text class="out" x="361" y="230" text-anchor="middle">Action</text><text class="out" x="361" y="241" text-anchor="middle">Memo</text>
+          <line x1="120" y1="190" x2="120" y2="218" marker-end="url(#a)"/><text class="yn" x="126" y="208">NO</text>
+
+          <!-- Q4 question -->
+          <rect class="q-box" x="20" y="220" width="200" height="40" rx="2"/>
+          <text class="q" x="120" y="237" text-anchor="middle">Asked a question or</text>
+          <text class="q" x="120" y="251" text-anchor="middle">for a recommendation?</text>
+          <path d="M220 240 H248 V274 H260" marker-end="url(#a)"/><text class="yn" x="226" y="234">YES</text>
+          <rect class="o-box" x="262" y="256" width="136" height="36" rx="2"/>
+          <text class="out" x="332" y="272" text-anchor="middle">Answer + support</text>
+          <text class="sub" x="332" y="285" text-anchor="middle">up to three points</text>
+          <line x1="120" y1="260" x2="120" y2="288" marker-end="url(#a)"/><text class="yn" x="126" y="278">NO</text>
+
+          <!-- Q5 several items -->
+          <rect class="q-box" x="20" y="290" width="200" height="40" rx="2"/>
+          <text class="q" x="120" y="314" text-anchor="middle">Several unrelated items?</text>
+          <line x1="220" y1="310" x2="272" y2="310" marker-end="url(#a)"/><text class="yn" x="240" y="304">YES</text>
+          <rect class="o-box" x="262" y="302" width="136" height="36" rx="2"/>
+          <text class="out" x="332" y="318" text-anchor="middle">Smart Brevity digest</text>
+          <text class="sub" x="332" y="331" text-anchor="middle">headline · why · ask</text>
+          <line x1="120" y1="330" x2="120" y2="358" marker-end="url(#a)"/><text class="yn" x="126" y="348">NO</text>
+
+          <!-- Q6 workstreams -->
+          <rect class="q-box" x="20" y="360" width="200" height="40" rx="2"/>
+          <text class="q" x="120" y="384" text-anchor="middle">More than one workstream?</text>
+          <line x1="220" y1="380" x2="272" y2="380" marker-end="url(#a)"/><text class="yn" x="240" y="374">YES</text>
+          <rect class="o-box" x="262" y="362" width="136" height="36" rx="2"/>
+          <text class="out" x="332" y="378" text-anchor="middle">SITREP with RAG</text>
+          <text class="sub" x="330" y="391" text-anchor="middle">detail Amber and Red only</text>
+          <line x1="120" y1="400" x2="120" y2="428" marker-end="url(#a)"/><text class="yn" x="126" y="418">NO</text>
+
+          <!-- Q7 exception -->
+          <rect class="q-box" x="20" y="430" width="200" height="40" rx="2"/>
+          <text class="q" x="120" y="447" text-anchor="middle">Blocker, deviation,</text>
+          <text class="q" x="120" y="461" text-anchor="middle">or milestone?</text>
+          <line x1="220" y1="450" x2="272" y2="450" marker-end="url(#a)"/><text class="yn" x="240" y="444">YES</text>
+          <rect class="o-box" x="262" y="432" width="136" height="36" rx="2"/>
+          <text class="out" x="332" y="448" text-anchor="middle">3P</text>
+          <text class="sub" x="332" y="461" text-anchor="middle">progress · plans · problems</text>
+          <line x1="120" y1="470" x2="120" y2="498" marker-end="url(#a)"/><text class="yn" x="126" y="488">NO</text>
+
+          <!-- terminal -->
+          <rect class="end" x="20" y="500" width="200" height="40" rx="20"/>
+          <text class="end-t" x="120" y="518" text-anchor="middle">Say nothing.</text>
+          <text class="end-t" x="120" y="532" text-anchor="middle" style="font-size:9.5px;font-weight:500">SILENCE MEANS ON TRACK</text>
+        </svg>
+      </div>
+      <div>
+        <table>
+          <thead><tr><th>Format</th><th>Skeleton</th></tr></thead>
+          <tbody>
+            <tr><td class="f">Closed-loop confirm</td><td class="s">About to X on Y. Reversible? Proceed?</td></tr>
+            <tr><td class="f">Decision log</td><td class="s">Decided X. Because Y. Reversible.</td></tr>
+            <tr><td class="f">SBAR</td><td class="s">Situation · Background · Assessment · Recommendation</td></tr>
+            <tr><td class="f">Action Memo</td><td class="s">DECISION by when · RECOMMEND + why · OPTIONS · RISK IF DEFERRED · APPROVE / DISAPPROVE</td></tr>
+            <tr><td class="f">Answer + support</td><td class="s">The answer. Then up to three points. Three is a ceiling.</td></tr>
+            <tr><td class="f">Smart Brevity</td><td class="s"><b>Headline.</b> Why it matters. Ask. One block per item.</td></tr>
+            <tr><td class="f">SITREP</td><td class="s">STATUS (R/A/G) · DONE · NEXT · BLOCKED · NEED</td></tr>
+            <tr><td class="f">3P</td><td class="s">Progress · Plans · Problems. Omit empty sections.</td></tr>
+          </tbody>
+        </table>
+        <p class="scale-note" style="margin-top:12px">Whatever the format, the first line reads like the bottom line: <i>“Blocked on the credential; everything else is done.”</i> A decision brief ends in a recommendation and asks for a decision. An information brief ends when the information is delivered. The first line should make clear which one this is.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb">
+    <div class="sh"><span class="n">04 ▸</span><span class="t">Uncertainty vocabulary</span><span class="r"></span><span class="m">ICD 203 · seven bands · 2015</span></div>
+    <div class="scale">
+      <div class="band"><div class="t">remote</div><div class="p">1–5</div></div>
+      <div class="band"><div class="t">very unlikely</div><div class="p">5–20</div></div>
+      <div class="band"><div class="t">unlikely</div><div class="p">20–45</div></div>
+      <div class="band mid"><div class="t">roughly even</div><div class="p">45–55</div></div>
+      <div class="band"><div class="t">likely</div><div class="p">55–80</div></div>
+      <div class="band"><div class="t">very likely</div><div class="p">80–95</div></div>
+      <div class="band"><div class="t">almost certain</div><div class="p">95–99</div></div>
+    </div>
+    <p class="scale-note">Terms have fixed meanings; do not invent intermediates. Probability of the judgment is separate from confidence in the evidence: if the evidence is thin, say “low confidence” once. A number beats an adjective when a number exists. “The test failed” is a fact. “The cause is likely the cache” is a judgment.</p>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">05 ▸</span><span class="t">Never</span><span class="r"></span><span class="m">Each one costs the reader time</span></div>
+    <ul class="never">
+      <li><b>Apologize</b> <span>or thank the reader for their patience.</span></li>
+      <li><b>Restate the question</b> <span>before answering. The pre-action confirm line is the one exception.</span></li>
+      <li><b>Open with pleasantries</b> <span>or close with an offer of further help.</span></li>
+      <li><b>Hedge without a reason.</b> <span>“It might possibly be” is banned; “unlikely” is allowed.</span></li>
+      <li><b>Bury the ask.</b> <span>If the reader must act, it is in the first line.</span></li>
+      <li><b>Report routine progress</b> <span>unprompted.</span></li>
+      <li><b>Pad to look thorough.</b> <span>Brevity is the evidence of thoroughness.</span></li>
+      <li><b>Mix layers.</b> <span>A fact does not get a probability term. A judgment always does.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">06 ▸</span><span class="t">Where each standard comes from</span><span class="r"></span><span class="m">Proven, not invented</span></div>
+    <div class="cat">
+      <div><b>BLUF</b> <span class="o">US Army · AR 25-50</span><p>Conclusion first. A rule, not a structure; every other format opens with it.</p></div>
+      <div><b>Action Memo</b> <span class="o">US State Dept · 5 FAH-1</span><p>Decision request with recommendation, options, and approve/disapprove lines.</p></div>
+      <div><b>SBAR</b> <span class="o">Kaiser Permanente · IHI · 2004</span><p>Escalation under time pressure. Navy origin is folklore; cite Kaiser.</p></div>
+      <div><b>Minto Pyramid · SCQA</b> <span class="o">McKinsey · 1978</span><p>Answer, then grouped support. “Three points” is a heuristic, not Minto’s rule.</p></div>
+      <div><b>3P</b> <span class="o">software practice · Anthropic internal-comms</span><p>Progress, Plans, Problems. Lightest routine status; empty sections vanish.</p></div>
+      <div><b>SITREP</b> <span class="o">military reporting · civilian adaptation</span><p>Periodic multi-stream status under one RAG. Change is visible by diff.</p></div>
+      <div><b>Smart Brevity</b> <span class="o">Axios · 2022</span><p>Headline, why it matters, go deeper. Best for digests; flattens argument.</p></div>
+      <div><b>Completed Staff Work</b> <span class="o">Lerch · US Army · 1942</span><p>Bring a finished recommendation to sign. The posture behind this page.</p></div>
+      <div><b>Decision vs information brief</b> <span class="o">US Army · ATP 5-0.1</span><p>Name which one you are giving. The first line should make it obvious.</p></div>
+      <div><b>Words of Estimative Probability</b> <span class="o">Kent · CIA · 1964 → ICD 203 · 2015</span><p>Fixed term-to-probability bands; confidence reported separately.</p></div>
+      <div><b>Closed-loop communication</b> <span class="o">ATC read-back · CRM · TeamSTEPPS</span><p>Restate before acting; the sender confirms. One line, before cost.</p></div>
+      <div><b>Management by exception · RAG</b> <span class="o">Taylor · PRINCE2</span><p>Report deviations only. Red and Amber get detail; Green gets a line or nothing.</p></div>
+      <div><b>Commander’s Intent</b> <span class="o">US Army · ADP 6-0</span><p>For tasking: purpose, key tasks, end state. Leave the how open.</p></div>
+      <div><b>ADR · Six-pager</b> <span class="o">Nygard 2011 · Amazon</span><p>Durable decisions get an ADR. Deep narrative only on explicit request.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">07 ▸</span><span class="t">Boundary</span><span class="r"></span><span class="m">Two standards, one line between them</span></div>
+    <div class="bound">
+      <div><b>Talking <i>to</i> the reader → exec-comms</b>Replies, status, asks, escalations. Terse, structured, bullets allowed, fixed opening line.</div>
+      <div><b>Writing a document <i>for</i> the reader → rnet-voice</b>Briefings, reports, memos, research. Flowing analytical prose; the argument lives in paragraphs.</div>
+    </div>
+  </section>
+
+  <footer><span>JR · Charts &amp; Vectors</span><span>agent-standards / skills / exec-comms</span></footer>
+</div>
+</body>
+</html>
