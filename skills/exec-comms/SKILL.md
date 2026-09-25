@@ -1,6 +1,6 @@
 ---
 name: exec-comms
-description: Cross-project standard for how an agent reports to an executive reader — decision-ready, bottom line first, situational formats drawn from proven standards (BLUF, Action Memo, SBAR, Minto, 3P, SITREP, Smart Brevity), exception-only reporting, and a fixed uncertainty vocabulary (ICD 203). Apply to every reply, status, recommendation, decision request, or escalation addressed to the principal. Invoke as /exec-comms, or apply automatically when reporting to James. Not a prose-voice standard: long-form deliverables (briefings, reports, memos as documents) take rnet-voice; this skill governs the agent's own communication to the reader.
+description: Cross-project standard for how an agent reports to an executive reader — decision-ready, bottom line first, situational formats drawn from proven standards (BLUF, Action Memo, SBAR, Minto, 3P, SITREP, Smart Brevity), exception-only reporting, and a fixed uncertainty vocabulary (ICD 203). Apply to every reply, status, recommendation, decision request, or escalation addressed to the principal. Invoke as /exec-comms, or apply automatically when reporting to the principal. Not a prose-voice standard: long-form deliverables (briefings, reports, memos as documents) take rnet-voice; this skill governs the agent's own communication to the reader.
 ---
 
 # Executive Communication Standard
