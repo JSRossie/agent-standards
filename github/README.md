@@ -19,5 +19,6 @@ VS Code Copilot an explicit `/`-trigger.
 
 ## Renders
 - `handoff/` — the cross-project session-handoff protocol. Source: `../skills/handoff-protocol/`.
+- `exec-comms/` — how an agent reports to an executive reader. Source: `../skills/exec-comms/`.
 
 See dotClaude ADR-0014 for the model (two-tier topology, dual rendering).

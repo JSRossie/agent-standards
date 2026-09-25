@@ -58,6 +58,7 @@ markers in Cowork — but **only by projects they apply to**. A project picks th
 |---|---|
 | [`fragments/commit-review-helper.md`](fragments/commit-review-helper.md) | the project has a `commit_review.py`-style auto-split commit helper |
 | [`fragments/cowork-sandbox.md`](fragments/cowork-sandbox.md) | the project runs in a Cowork sandbox (file-delete recovery, `gc.auto=0`, debris handling) |
+| [`fragments/exec-comms.md`](fragments/exec-comms.md) | the agent reports to an executive reader — the always-on nucleus of `skills/exec-comms/` (bottom line first, exception reporting, fixed uncertainty terms); James imports it into global `~/.claude/CLAUDE.md` |
 
 ## Distribution
 
@@ -72,6 +73,7 @@ stay frozen until manually re-synced.
 | Behavior | Skill (Claude-native) | Render (cross-tool) |
 |---|---|---|
 | `citation-standards` | `skills/citation-standards/` | — |
+| `exec-comms` | `skills/exec-comms/` | `github/exec-comms/` |
 | `handoff-protocol` | `skills/handoff-protocol/` | `github/handoff/` |
 | `planning-protocol` | `skills/planning-protocol/` | `github/planning/` |
 
