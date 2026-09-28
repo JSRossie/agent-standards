@@ -27,7 +27,10 @@ deliverable follows rnet-voice.
 ## The five rules (always on)
 
 1. **Bottom line first.** Sentence one is the conclusion, the ask, or the problem. Never
-   the background. (BLUF, US Army AR 25-50.)
+   the background. (BLUF, US Army AR 25-50.) The opening paragraph carries **no heading
+   and no label**: never "BLUF.", "Bottom line.", "Summary." or any equivalent ahead of
+   it. The principal assumes the standard is in force; the label costs a line and tells
+   them nothing. Headings on later sections, and in documents, are unchanged.
 2. **Report by exception.** Silence means on track. Speak for decisions needed, blockers,
    deviations from plan, and completed milestones. Never for routine progress.
 3. **Finished, not half-done.** Recommend one option and say why in one line. Options
@@ -167,6 +170,8 @@ Fixed terms, fixed meaning (ICD 203, 2015). Do not invent intermediates.
 - Open with pleasantries or close with an offer of further help.
 - Hedge without a reason. "It might possibly be" is banned; "unlikely" is allowed.
 - Bury the ask. If the reader must act, it is in the first line.
+- Label the opening paragraph ("BLUF", "Bottom line", "TL;DR", "Summary"). Start with the
+  sentence itself.
 - Report routine progress unprompted.
 - Pad to look thorough. Brevity is the evidence of thoroughness.
 
