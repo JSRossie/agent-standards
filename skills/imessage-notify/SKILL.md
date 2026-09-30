@@ -84,7 +84,7 @@ principal's reply in the thread is the only proof of arrival.
 
 - Tested 2026-09-29 from the `quinn` profile during a Zulip DM: job
   `df86df88b2ea`, delivered in about 4 s, message id returned. Arrival on the
-  phone not yet confirmed by the principal at the time of writing.
+  phone confirmed by the principal the same evening ("got it" in the thread).
 - Not checked: whether each profile (quinn, morgan, laura) texts from its own
   line or shares one thread. Each profile has its own Photon project
   credentials. If it matters, send a test from the new profile and ask.
