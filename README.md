@@ -75,6 +75,7 @@ stay frozen until manually re-synced.
 | `citation-standards` | `skills/citation-standards/` | — |
 | `exec-comms` | `skills/exec-comms/` | `github/exec-comms/` |
 | `handoff-protocol` | `skills/handoff-protocol/` | `github/handoff/` |
+| `notification-priority` | `skills/notification-priority/` | — |
 | `planning-protocol` | `skills/planning-protocol/` | `github/planning/` |
 
 `handoff-protocol` is parameterized on `handoffs_root` / `git_posture` per project; derived
