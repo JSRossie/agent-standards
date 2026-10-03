@@ -3,7 +3,7 @@ name: notification-priority
 description: Use when an agent decides how to reach the principal unprompted (alert, reminder, report, cron delivery). Maps P1/P2/P3 to iMessage, Zulip DM, or a channel.
 ---
 
-# Notification priority (DRAFT, pending principal approval)
+# Notification priority
 
 Every unprompted message to the principal carries a priority. The priority picks
 the channel. Replies are not notifications: a reply goes back to wherever the
