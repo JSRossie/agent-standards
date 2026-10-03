@@ -182,6 +182,8 @@ for precision. Their use is optional; plain imperative is equally binding.
 
 ## Reference
 
+- `notification-priority` skill: which channel an unprompted message takes (P1 iMessage, P2 DM, P3 channel). This skill governs how it reads once there.
+
 - `reference/STANDARDS.md` — the source standards: origin, description, pros/cons, sample
   output, when to reach for each.
 - `reference/QUICKREF.md` — one-page reminder, plain text.

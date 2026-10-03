@@ -6,7 +6,8 @@ description: Use when the principal asks to be texted, messaged on his phone, or
 # iMessage notify (Photon)
 
 A notification is one line to the principal's phone saying what finished and
-where to look. It goes over the **Photon** adapter, a Hermes gateway platform
+where to look. Whether a matter warrants a text at all is set by
+`notification-priority`: only P1 goes to the phone. It goes over the **Photon** adapter, a Hermes gateway platform
 that relays iMessage through Photon's cloud. It does not go through this Mac's
 Messages app.
 
