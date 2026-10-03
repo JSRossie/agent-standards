@@ -72,6 +72,7 @@ stay frozen until manually re-synced.
 
 | Behavior | Skill (Claude-native) | Render (cross-tool) |
 |---|---|---|
+| `car-lease-loan` | `skills/car-lease-loan/` (CLI + stdio MCP) | — |
 | `citation-standards` | `skills/citation-standards/` | — |
 | `exec-comms` | `skills/exec-comms/` | `github/exec-comms/` |
 | `handoff-protocol` | `skills/handoff-protocol/` | `github/handoff/` |
